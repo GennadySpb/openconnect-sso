@@ -118,12 +118,14 @@ def _create_auth_init_request(host, url, version):
     GroupSelect = getattr(E, "group-select")
     GroupAccess = getattr(E, "group-access")
     Capabilities = E.capabilities
+    ClientCertFail = getattr(E, "client-cert-fail")
     AuthMethod = getattr(E, "auth-method")
 
     root = ConfigAuth(
         {"client": "vpn", "type": "init", "aggregate-auth-version": "2"},
         Version({"who": "vpn"}, version),
         DeviceId("linux-64"),
+        ClientCertFail(),
         GroupSelect(host.name),
         GroupAccess(url),
         Capabilities(AuthMethod("single-sign-on-v2")),
@@ -208,6 +210,7 @@ def _create_auth_finish_request(host, auth_info, sso_token, version):
     SessionToken = getattr(E, "session-token")
     SessionId = getattr(E, "session-id")
     Auth = E.auth
+    ClientCertFail = getattr(E, "client-cert-fail")
     SsoToken = getattr(E, "sso-token")
 
     root = ConfigAuth(
@@ -216,6 +219,7 @@ def _create_auth_finish_request(host, auth_info, sso_token, version):
         DeviceId("linux-64"),
         SessionToken(),
         SessionId(),
+        ClientCertFail(),
         auth_info.opaque,
         Auth(SsoToken(sso_token)),
     )
